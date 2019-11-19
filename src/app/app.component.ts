@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, ViewChild, ViewContainerRef, ComponentFactoryResolver, ComponentRef, ComponentFactory, Input } from '@angular/core';
+import { AlertComponent } from './components/alert/alert.component';
 
 
 @Component({
@@ -12,8 +13,10 @@ export class AppComponent {
   hideSignUp = false;
   hideLogOut = true;
   hideMe = true;
+  @ViewChild('alert', { static: false, read: ViewContainerRef }) entry: ViewContainerRef;
 
-  constructor() { }
+
+  constructor(private resolver: ComponentFactoryResolver) { }
 
   ngOnInit() {
   }
@@ -27,4 +30,14 @@ export class AppComponent {
     console.log('After Login flag: ', this.hideLogIn , 'Signup flag:', this.hideSignUp);
   }
 
+  createAlertComponent(type, msg) {
+    this.entry.clear();
+    const factory = this.resolver.resolveComponentFactory(AlertComponent);
+    let componentRef = this.entry.createComponent(factory);
+    componentRef.instance.type = type;
+    componentRef.instance.msg = msg;
+    window.setTimeout(()=>{
+      componentRef.destroy();
+    } , 3000);
+  }
 }

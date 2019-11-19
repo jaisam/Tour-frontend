@@ -34,13 +34,15 @@ export class LoginComponent implements OnInit {
       .subscribe(res => {
         if (res.status === "success") {
           const token = res.token;
-          this.cookieService.set('token', token, 1); // Expiry time is set to 1 day
+          this.authService.setToken(token);
           this.appComponent.switchButtons();
-          this.router.navigate(['tour-list']);
+          this.appComponent.createAlertComponent('success' , 'User logged in successfully!');
+          this.router.navigate(['tour-list']); 
         }
       },
         err => {
           console.log(err.error.message);
+          this.appComponent.createAlertComponent('error' , err.error.message);
         });
   }
 }
