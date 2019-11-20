@@ -22,22 +22,27 @@ export class AuthService {
   }
 
   deleteToken() {
-     this.cookieService.delete('jwt' , '/');
+    this.cookieService.delete('jwt', '/');
   }
 
+  createUser(user): Observable<any> {
+    let server_url = this.server_base_url + '/signup';
+    console.log(server_url);
+    return this.http.post<any>(server_url , user);
+  }
   login(user): Observable<any> {
     let server_url = this.server_base_url + '/login';
     return this.http.post<any>(server_url, user);
   }
 
-  getUser() :Observable<any> {
+  getUser(): Observable<any> {
     let server_url = this.server_base_url + '/me';
     return this.http.get(server_url);
   }
 
-  updateUserData(user) :Observable<any> {
+  updateUserData(user): Observable<any> {
     let server_url = this.server_base_url + '/updateMe'
-    return this.http.patch<any>(server_url , user);
+    return this.http.patch<any>(server_url, user);
   }
 
   updatePassword(user): Observable<any> {

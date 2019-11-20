@@ -18,6 +18,7 @@ export class MyAccountComponent implements OnInit {
   password;
   passwordConfirm;
   user;
+  file;
 
   constructor(private authService: AuthService,
     private appComponent: AppComponent,
@@ -25,6 +26,10 @@ export class MyAccountComponent implements OnInit {
 
   ngOnInit() {
     this.getUser();
+  }
+
+  onFileChanged(event){
+    this.file = event.target.files[0];   
   }
 
   getUser() {
@@ -42,11 +47,17 @@ export class MyAccountComponent implements OnInit {
 
 
   updateUserData(userData) {
-    let user = {
-      name: userData.value.name,
-      email: userData.value.email,
-      photo: userData.value.photo
-    }
+    // console.log('photo :' , this.file);
+    let user = new FormData();
+    user.append('name' , userData.value.name);
+    user.append('email', userData.value.email);
+    user.append('photo', this.file);
+    console.log(user.get('name'));
+    // let user = {
+    //   name: userData.value.name,
+    //   email: userData.value.email,
+    //   photo: userData.value.photo
+    // }
     this.authService.updateUserData(user)
       .subscribe(res => {
         if (res.status === "success") {

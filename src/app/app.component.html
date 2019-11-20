@@ -7,18 +7,14 @@
         <img src="../assets/img/logo-white.png" alt="Natours logo" />
     </div>
     <nav class="nav nav--user">
-        <a class="nav__el nav__el--logout" [hidden] = "hideLogOut">Log out</a>
-        <a class="nav__el" routerLink = "/me" [hidden] = "hideMe">
+        <a class="nav__el nav__el--logout" *ngIf="hideLogOut" (click)="logOut()">Log out</a>
+        <a class="nav__el" routerLink="/me" *ngIf="hideMe">
             <img class="nav__user-img" src="/img/users" alt="Photo of " />
-            <span>username</span>
+            <span>{{ userName }}</span>
         </a>
-        <a class="nav__el" routerLink="login" [hidden] = "hideLogIn">Log in</a>
-        <a class="nav__el nav__el--cta" [hidden] = "hideSignUp" href="#">Sign up</a>
+        <a class="nav__el" routerLink="login" *ngIf="hideLogIn" (userCredentials)="userCredential($event)">Log in</a>
+        <a class="nav__el nav__el--cta" routerLink="signup" *ngIf="hideSignUp" (userCredentials)="userCredential($event)">Sign up</a>
     </nav>
-    <!-- <a class="btn btn-outline-primary m-1" routerLink = "signup" [hidden] = "hideSignUp"> Sign Up </a>
-    <a class="btn btn-outline-primary m-1" routerLink = "signin" [hidden] = "hideSignIn"> Sign In </a>
-    <a class="btn btn-outline-primary m-1" [hidden] = "hideLogOut" (click) = "logOut()"> Log Out </a>
-   -->
 </header>
 
 <router-outlet></router-outlet>

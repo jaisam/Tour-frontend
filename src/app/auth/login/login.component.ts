@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, EventEmitter, Output } from '@angular/core';
 import { Router } from '@angular/router';
 import { CookieService } from 'ngx-cookie-service';
 
@@ -15,11 +15,12 @@ export class LoginComponent implements OnInit {
 
   email: String;
   password: String;
+  @Output() userCredentials = new EventEmitter();
 
   constructor(private authService: AuthService,
     private router: Router,
     private cookieService: CookieService,
-    private appComponent : AppComponent) { }
+    private appComponent: AppComponent) { }
 
   ngOnInit() {
   }
@@ -33,16 +34,22 @@ export class LoginComponent implements OnInit {
     this.authService.login(user)
       .subscribe(res => {
         if (res.status === "success") {
-          const token = res.token;
-          this.authService.setToken(token);
+          let user = {
+            name: res.data.user.name,
+            photo: res.data.user.photo,
+            role: res.data.user.role
+          };
+          this.authService.setToken(res.token);
           this.appComponent.switchButtons();
-          this.appComponent.createAlertComponent('success' , 'User logged in successfully!');
-          this.router.navigate(['tour-list']); 
+          this.appComponent.createAlertComponent('success', 'User logged in successfully!');
+          // console.log(user);
+          this.userCredentials.emit(user);
+          this.router.navigate(['tour-list']);
         }
       },
         err => {
           console.log(err.error.message);
-          this.appComponent.createAlertComponent('error' , err.error.message);
+          this.appComponent.createAlertComponent('error', err.error.message);
         });
   }
 }
