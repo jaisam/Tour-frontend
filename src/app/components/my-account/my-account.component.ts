@@ -17,13 +17,29 @@ export class MyAccountComponent implements OnInit {
   passwordCurrent;
   password;
   passwordConfirm;
+  user;
 
   constructor(private authService: AuthService,
     private appComponent: AppComponent,
     private router: Router) { }
 
   ngOnInit() {
+    this.getUser();
   }
+
+  getUser() {
+    this.authService.getUser()
+      .subscribe(res => {
+        if (res.status === "success") {
+          this.user = res.data.data;
+        }
+      },
+        err => {
+          console.log(err);
+          this.appComponent.createAlertComponent("error", err.error.message);
+        })
+  }
+
 
   updateUserData(userData) {
     let user = {
@@ -33,17 +49,19 @@ export class MyAccountComponent implements OnInit {
     }
     this.authService.updateUserData(user)
       .subscribe(res => {
-        if(res.status === "success") {
+        if (res.status === "success") {
+          userData.reset(); // Resetting the input fields
           // No need to assign new token as only name or email or photo of user is updated.
           // const token = res.token;
           // this.authService.setToken(token);
           this.appComponent.createAlertComponent("success", "User data updated successfully!");
+          this.user = res.data.user;
         }
-      }, 
-      err => {
-        console.log(err);
-        this.appComponent.createAlertComponent("error" , err.error.message );
-      });
+      },
+        err => {
+          console.log(err);
+          this.appComponent.createAlertComponent("error", err.error.message);
+        });
   }
 
   updatePassword(passwordData) {
@@ -56,6 +74,7 @@ export class MyAccountComponent implements OnInit {
       .subscribe(res => {
         console.log(res);
         if (res.status === "success") {
+          passwordData.reset(); // Resetting the input fields
           // Need to delete old token as password is updated and let user login again to get new token
           this.authService.deleteToken();
           this.appComponent.createAlertComponent("success", "Password updated successfully! Please Login again");

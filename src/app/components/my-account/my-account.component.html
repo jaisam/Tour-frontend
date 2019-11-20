@@ -71,17 +71,23 @@
                 <form class="form form-user-data" #userData="ngForm" (ngSubmit)="updateUserData(userData)">
                     <div class="form__group">
                         <label class="form__label" for="name">Name</label>
-                        <input class="form__input" id="name" type="text" value="Jonas Schmedtmann" required="required"
+                        <input class="form__input" id="name" type="text" [attr.placeholder]="user.name" required="required"
                             name="name" [(ngModel)]="name" />
                     </div>
                     <div class="form__group ma-bt-md">
                         <label class="form__label" for="email">Email address</label>
-                        <input class="form__input" id="email" type="email" value="admin@natours.io" required="required"
+                        <input class="form__input" id="email" type="email" [attr.placeholder]="user.email" required="required"
                             name="email" [(ngModel)]="email" />
                     </div>
-                    <div class="form__group form__photo-upload">
+                    <!-- <div class="form__group form__photo-upload">
                         <img class="form__user-photo" src="img/user.jpg" alt="User photo" />
                         <a class="btn-text" href="" name="photo" [(ngModel)]="photo">Choose new photo</a>
+                    </div> -->
+                    <div class="form__group form__photo-upload">
+                        <img class="form__user-photo" src="/img/users/photo" alt="User photo" />
+                        <input class="form__upload" type="file" accept="image/*" id="photo" name="photo"
+                            ([ngMode])="photo" />
+                        <label for="photo">Choose new photo</label>
                     </div>
                     <div class="form__group right">
                         <button class="btn btn--small btn--green">Save settings</button>

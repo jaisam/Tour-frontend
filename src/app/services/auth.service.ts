@@ -30,13 +30,18 @@ export class AuthService {
     return this.http.post<any>(server_url, user);
   }
 
-  updatePassword(user): Observable<any> {
-    let server_url = this.server_base_url + '/updateMyPassword';
-    return this.http.patch<any>(server_url, user);
+  getUser() :Observable<any> {
+    let server_url = this.server_base_url + '/me';
+    return this.http.get(server_url);
   }
 
   updateUserData(user) :Observable<any> {
     let server_url = this.server_base_url + '/updateMe'
     return this.http.patch<any>(server_url , user);
+  }
+
+  updatePassword(user): Observable<any> {
+    let server_url = this.server_base_url + '/updateMyPassword';
+    return this.http.patch<any>(server_url, user);
   }
 }
