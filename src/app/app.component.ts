@@ -1,38 +1,60 @@
-import { Component, OnInit, ViewChild, ViewContainerRef, ComponentFactoryResolver, ComponentRef, ComponentFactory, Input } from '@angular/core';
+import { Component, OnInit, ViewChild, ViewContainerRef, ComponentFactoryResolver, ComponentRef, ComponentFactory, Input, OnDestroy } from '@angular/core';
 import { AlertComponent } from './components/alert/alert.component';
 import { AuthService } from './services/auth.service';
+import { GlobalsService } from './services/globals.service';
+import { Subscription } from 'rxjs';
+import { ToastrService } from 'ngx-toastr';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent {
+export class AppComponent implements OnInit, OnDestroy {
 
-  userName;
-  hideLogIn = true;
-  hideSignUp = true;
-  hideLogOut = false;
-  hideMe = false;
+  user;
+
+  private userCredentialsSubscription: Subscription;
+
   @ViewChild('alert', { static: false, read: ViewContainerRef }) entry: ViewContainerRef;
 
 
-  constructor(private resolver: ComponentFactoryResolver, private authService: AuthService) { }
+  constructor(private resolver: ComponentFactoryResolver,
+    private authService: AuthService,
+    globalsService: GlobalsService,private toastr: ToastrService,private router:Router) {
+    // this.user = globalsService.user;
+  }
 
   ngOnInit() {
+    // this.userRole = this.authService.getRole();
+    console.log(this.authService.getToken());
+    if (this.authService.getToken()) {
+      this.authService.getUser();
+    }
+    this.userCredentialsSubscription = this.authService.getUserCredentials()
+      .subscribe(res => {
+        console.log(res);
+        if (res) {
+          this.user = { ...res };
+          this.user.name = this.user.name.split(" ")[0];
+        }else{
+          this.user=null;
+        }
+      });
   }
 
-  switchButtons() {
-    this.hideLogIn = !this.hideLogIn;
-    this.hideSignUp = !this.hideSignUp;
-    this.hideLogOut = !this.hideLogOut;
-    this.hideMe = !this.hideMe;
+  ngOnDestroy() {
+    this.userCredentialsSubscription.unsubscribe();
   }
 
-  logOut() {
-    this.authService.deleteToken();
-    this.createAlertComponent("success", "User logged out successfully!");
-    this.switchButtons();
+  onLogout() {
+    this.authService.logout();
+    this.router.navigate(['/']);
+    this.toastr.success('User logged out successfully!', '', {
+      positionClass: 'toast-top-center',
+      timeOut: 3000
+    });
   }
 
   createAlertComponent(type, msg) {
@@ -46,8 +68,7 @@ export class AppComponent {
     }, 3000);
   }
 
-  userCredential(user) {
-    console.log(user);
-    this.userName = user.name;
-  }
+  // userCredential(user) {
+  //   this.user = user.name;
+  // }
 }

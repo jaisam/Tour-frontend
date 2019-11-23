@@ -1,15 +1,16 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { AuthService } from 'src/app/services/auth.service';
 import { AppComponent } from 'src/app/app.component';
 import { Router } from '@angular/router';
-
+import { Subscription } from 'rxjs';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-my-account',
   templateUrl: './my-account.component.html',
   styleUrls: ['./my-account.component.css']
 })
-export class MyAccountComponent implements OnInit {
+export class MyAccountComponent implements OnInit, OnDestroy {
 
   name;
   email;
@@ -17,61 +18,80 @@ export class MyAccountComponent implements OnInit {
   passwordCurrent;
   password;
   passwordConfirm;
-  user;
+  public user = {
+    name: "",
+    email: "",
+    photo: ""
+  };
   file;
+  private userCredentialsSubscription: Subscription;
 
   constructor(private authService: AuthService,
     private appComponent: AppComponent,
-    private router: Router) { }
+    private router: Router,
+    private toastr: ToastrService) {
+  }
 
   ngOnInit() {
-    this.getUser();
-  }
 
-  onFileChanged(event){
-    this.file = event.target.files[0];   
-  }
-
-  getUser() {
-    this.authService.getUser()
+    this.userCredentialsSubscription = this.authService.getUserCredentials()
       .subscribe(res => {
-        if (res.status === "success") {
-          this.user = res.data.data;
+        console.log(res);
+        if (res) {
+          this.user.email = res.email;
+          this.user.name = res.name;
+          this.user.photo = res.photo;
         }
-      },
-        err => {
-          console.log(err);
-          this.appComponent.createAlertComponent("error", err.error.message);
-        })
+        else{
+          this.user = {
+            name: "",
+            email: "",
+            photo: ""
+          };
+        }
+      });
   }
 
+  ngOnDestroy() {
+    this.userCredentialsSubscription.unsubscribe();
+  }
+
+  onFileChanged(event) {
+    this.file = event.target.files[0];
+  }
 
   updateUserData(userData) {
     // console.log('photo :' , this.file);
-    let user = new FormData();
-    user.append('name' , userData.value.name);
-    user.append('email', userData.value.email);
-    user.append('photo', this.file);
-    console.log(user.get('name'));
-    // let user = {
-    //   name: userData.value.name,
-    //   email: userData.value.email,
-    //   photo: userData.value.photo
-    // }
-    this.authService.updateUserData(user)
+    // let user = new FormData();
+    // user.append('name', userData.value.name);
+    // user.append('email', userData.value.email);
+    // user.append('photo', this.file);
+    // console.log(user.get('name'));
+    console.log(this.user);
+    this.authService.updateUserData(this.user)
       .subscribe(res => {
         if (res.status === "success") {
-          userData.reset(); // Resetting the input fields
+          // userData.reset(); // Resetting the input fields
+          this.authService.setUser(res.data.user);
           // No need to assign new token as only name or email or photo of user is updated.
           // const token = res.token;
           // this.authService.setToken(token);
-          this.appComponent.createAlertComponent("success", "User data updated successfully!");
-          this.user = res.data.user;
+          this.toastr.success('User data updated successfully', '', {
+            positionClass: 'toast-top-center',
+            timeOut: 3000
+          });
         }
       },
         err => {
           console.log(err);
-          this.appComponent.createAlertComponent("error", err.error.message);
+          this.toastr.error(err.error.message, '', {
+            positionClass: 'toast-top-center',
+            timeOut: 3000
+          });
+          if (err.status === 401) {
+            this.authService.logout();
+            this.router.navigate(['/login']);
+          }
         });
   }
 
@@ -88,13 +108,20 @@ export class MyAccountComponent implements OnInit {
           passwordData.reset(); // Resetting the input fields
           // Need to delete old token as password is updated and let user login again to get new token
           this.authService.deleteToken();
-          this.appComponent.createAlertComponent("success", "Password updated successfully! Please Login again");
+          this.toastr.success('Password updated successfully! Please Login again', '', {
+            positionClass: 'toast-top-center',
+            timeOut: 3000
+          });
           this.router.navigate(["/login"]);
         }
       },
         err => {
-          console.log(err);
-          this.appComponent.createAlertComponent("error", err.error.message);
+          console.log(err.error.message);
+          this.toastr.error(err.error.message, '', {
+            positionClass: 'toast-top-center',
+            timeOut: 3000
+          });
         });
   }
+
 }

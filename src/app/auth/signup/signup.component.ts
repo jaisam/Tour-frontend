@@ -41,25 +41,25 @@ export class SignupComponent implements OnInit {
       passwordConfirm: form.value.passwordConfirm
     };
 
-    this.authService.createUser(user)
-      .subscribe(res => {
-        if (res.status === "success") {
-          this.appComponent.createAlertComponent("success", "User created successfully!");
-          let user = {
-            name: res.data.user.name,
-            photo: res.data.user.photo,
-            role: res.data.user.role
-          };
-          this.authService.setToken(res.token);
-          this.appComponent.switchButtons();
-          this.userCredentials.emit(user);
-          this.router.navigate(['/tour-list']);
-        }
-      },
-        err => {
-          console.log(err);
-          this.appComponent.createAlertComponent("error", err.error.message);
-        });
+    this.authService.signup(user)
+  //     .subscribe(res => {
+  //       if (res.status === "success") {
+  //         this.appComponent.createAlertComponent("success", "User created successfully!");
+  //         let user = {
+  //           name: res.data.user.name,
+  //           photo: res.data.user.photo,
+  //           role: res.data.user.role
+  //         };
+  //         this.authService.setToken(res.token);
+  //         this.appComponent.switchButtons();
+  //         this.userCredentials.emit(user);
+  //         this.router.navigate(['/tour-list']);
+  //       }
+  //     },
+  //       err => {
+  //         console.log(err);
+  //         this.appComponent.createAlertComponent("error", err.error.message);
+  //       });
   }
 
 }

@@ -4,14 +4,21 @@
         <form #loginForm="ngForm" (ngSubmit)="authenticate(loginForm)" class="form form--login">
             <div class="form__group">
                 <label class="form__label" for="email">Email address</label>
-                <input class="form__input" id="email" type="email" placeholder="you@example.com" required="required"
-                    name="email" [(ngModel)]="email" />
+                <input class="form__input" id="email" type="email" placeholder="you@example.com" required
+                    name="email" [(ngModel)]="email" #emailInput="ngModel" />
             </div>
+            <br>{{ emailInput.className }}
+            <!-- <div *ngIf="emailInput.touched && emailInput.invalid" class="alert alert-error">
+                Email is required
+            </div> -->
             <div class="form__group ma-bt-md">
                 <label class="form__label" for="password">Password</label>
-                <input class="form__input" id="password" type="password" placeholder="••••••••" required="required" minlength="8" 
-                    name="password" [(ngModel)]="password" />
+                <input class="form__input" id="password" type="password" placeholder="••••••••" required
+                    minlength="8" name="password" [(ngModel)]="password" #passwordInput="ngModel" />
             </div>
+            <!-- <div *ngIf="passwordInput.invalid" class="alert alert--error">
+                Password is required
+            </div> -->
             <div class="form__group">
                 <button class="btn btn--green">Login</button>
             </div>

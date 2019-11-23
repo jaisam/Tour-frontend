@@ -3,6 +3,9 @@ import { NgModule } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { CookieService } from 'ngx-cookie-service';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ToastrModule } from 'ngx-toastr';
 
 import { TokenInterceptor } from './auth/token.interceptor';
 import { AppRoutingModule } from './app-routing.module';
@@ -13,9 +16,10 @@ import { MonthYearFormatPipe } from './pipes/month-year-format.pipe';
 import { TourListComponent } from './components/tour-list/tour-list.component';
 import { LoginComponent } from './auth/login/login.component';
 import { SignupComponent } from './auth/signup/signup.component';
-import { CookieService } from 'ngx-cookie-service';
 import { AlertComponent } from './components/alert/alert.component';
 import { MyAccountComponent } from './components/my-account/my-account.component';
+import { GlobalsService } from './services/globals.service';
+
 
 @NgModule({
   declarations: [
@@ -33,9 +37,12 @@ import { MyAccountComponent } from './components/my-account/my-account.component
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
-    FormsModule
+    FormsModule,
+    BrowserAnimationsModule,
+    ToastrModule.forRoot()
   ],
   providers: [
+    GlobalsService ,
     CookieService,
     {
       provide: HTTP_INTERCEPTORS,

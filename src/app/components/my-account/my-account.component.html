@@ -71,13 +71,13 @@
                 <form class="form form-user-data" #userData="ngForm" (ngSubmit)="updateUserData(userData)">
                     <div class="form__group">
                         <label class="form__label" for="name">Name</label>
-                        <input class="form__input" id="name" type="text" [attr.placeholder]="user?.name"
-                            required="required" name="name" [(ngModel)]="name" />
+                        <input class="form__input" id="name" type="text" 
+                            required="required" name="name" [(ngModel)]="user.name" />
                     </div>
                     <div class="form__group ma-bt-md">
                         <label class="form__label" for="email">Email address</label>
-                        <input class="form__input" id="email" type="email" [attr.placeholder]="user?.email"
-                            required="required" name="email" [(ngModel)]="email" />
+                        <input class="form__input" id="email" type="email" 
+                            required="required" name="email" [(ngModel)]="user.email" />
                     </div>
                     <!-- <div class="form__group form__photo-upload">
                         <img class="form__user-photo" src="../../assets/img/user.jpg" alt="User photo" />
