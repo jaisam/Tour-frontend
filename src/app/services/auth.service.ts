@@ -5,6 +5,8 @@ import { environment } from '../../environments/environment';
 import { CookieService } from 'ngx-cookie-service';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
+// import { AppComponent } from '../app.component';
+
 @Injectable({
   providedIn: 'root'
 })
@@ -25,7 +27,7 @@ export class AuthService {
   constructor(private http: HttpClient,
     private router: Router,
     private cookieService: CookieService,
-    private toastr: ToastrService,
+    private toastr: ToastrService
     // private appComponent: AppComponent
   ) { }
 
@@ -95,7 +97,7 @@ export class AuthService {
       },
         err => {
           console.log(err.error.message);
-          this.toastr.error(err.error.msg, '', {
+          this.toastr.error(err.error.message, '', {
             positionClass: 'toast-top-center',
             timeOut: 3000
           });
@@ -104,9 +106,15 @@ export class AuthService {
 
   logout() {
     this.deleteToken();
-    this.user = null;
+    this.user = {
+      name:"",
+      email:"",
+      photo:"",
+      role:"",
+      _id:""
+    };
     this.userCredentials.next(this.user);
-    
+    this.router.navigate(['/']);
     // this.toastr.success('User logged out successfully!', '', {
     //   positionClass: 'toast-top-center',
     //   timeOut: 3000

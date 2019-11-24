@@ -61,14 +61,14 @@ export class MyAccountComponent implements OnInit, OnDestroy {
   }
 
   updateUserData(userData) {
-    // console.log('photo :' , this.file);
-    // let user = new FormData();
-    // user.append('name', userData.value.name);
-    // user.append('email', userData.value.email);
-    // user.append('photo', this.file);
+    console.log('photo :' , this.file);
+    let user = new FormData();
+    user.append('name', userData.value.name ? userData.value.name : this.user.name );
+    user.append('email', userData.value.email ? userData.value.email : this.user.email );
+    user.append('photo', this.file );
     // console.log(user.get('name'));
-    console.log(this.user);
-    this.authService.updateUserData(this.user)
+    console.log(user);
+    this.authService.updateUserData(user)
       .subscribe(res => {
         if (res.status === "success") {
           // userData.reset(); // Resetting the input fields
@@ -112,7 +112,7 @@ export class MyAccountComponent implements OnInit, OnDestroy {
             positionClass: 'toast-top-center',
             timeOut: 3000
           });
-          this.router.navigate(["/login"]);
+          this.appComponent.onLogout();
         }
       },
         err => {

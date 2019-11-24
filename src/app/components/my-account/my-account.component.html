@@ -71,20 +71,27 @@
                 <form class="form form-user-data" #userData="ngForm" (ngSubmit)="updateUserData(userData)">
                     <div class="form__group">
                         <label class="form__label" for="name">Name</label>
-                        <input class="form__input" id="name" type="text" 
-                            required="required" name="name" [(ngModel)]="user.name" />
+                        <input class="form__input" id="name" type="text" required="required" name="name"
+                            [(ngModel)]="user.name" />
                     </div>
                     <div class="form__group ma-bt-md">
                         <label class="form__label" for="email">Email address</label>
-                        <input class="form__input" id="email" type="email" 
-                            required="required" name="email" [(ngModel)]="user.email" />
+                        <input class="form__input" id="email" type="email" required="required" name="email"
+                            [(ngModel)]="user.email" />
                     </div>
                     <!-- <div class="form__group form__photo-upload">
                         <img class="form__user-photo" src="../../assets/img/user.jpg" alt="User photo" />
                         <a class="btn-text" href="" name="photo" [(ngModel)]="photo">Choose new photo</a>
                     </div> -->
                     <div class="form__group form__photo-upload">
-                        <img class="form__user-photo" src="/img/users/photo" alt="User photo" />
+                        <div *ngIf="user.photo != 'default.jpg' ; then userPhoto else defaultPhoto">
+                        </div>
+                        <ng-template #userPhoto>
+                            <img class="form__user-photo" src="{{ user.photo }}" alt="{{ user.name }}" />
+                        </ng-template>
+                        <ng-template #defaultPhoto>
+                            <img class="form__user-photo" src="./../../../assets/img/users/default.jpg" alt="default" />
+                        </ng-template>
                         <input class="form__upload" type="file" accept="image/*" id="photo" name="photo"
                             ([ngMode])="photo" (change)="onFileChanged($event)" />
                         <label for="photo">Choose new photo</label>

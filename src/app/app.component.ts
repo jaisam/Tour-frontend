@@ -14,7 +14,7 @@ import { Router } from '@angular/router';
 export class AppComponent implements OnInit, OnDestroy {
 
   user;
-
+  isAuthenticated = false;
   private userCredentialsSubscription: Subscription;
 
   @ViewChild('alert', { static: false, read: ViewContainerRef }) entry: ViewContainerRef;
@@ -22,7 +22,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
   constructor(private resolver: ComponentFactoryResolver,
     private authService: AuthService,
-    globalsService: GlobalsService,private toastr: ToastrService,private router:Router) {
+    globalsService: GlobalsService, private toastr: ToastrService, private router: Router) {
     // this.user = globalsService.user;
   }
 
@@ -35,11 +35,13 @@ export class AppComponent implements OnInit, OnDestroy {
     this.userCredentialsSubscription = this.authService.getUserCredentials()
       .subscribe(res => {
         console.log(res);
-        if (res) {
+        if (res.name != "") {
           this.user = { ...res };
           this.user.name = this.user.name.split(" ")[0];
-        }else{
-          this.user=null;
+          this.isAuthenticated = !this.isAuthenticated;;
+        } else {
+          // this.isAuthenticated = !this.isAuthenticated;
+          console.log(this.isAuthenticated);
         }
       });
   }
@@ -50,7 +52,9 @@ export class AppComponent implements OnInit, OnDestroy {
 
   onLogout() {
     this.authService.logout();
-    this.router.navigate(['/']);
+    console.log('Before', this.isAuthenticated);
+    this.isAuthenticated = !this.isAuthenticated;
+    console.log('after', this.isAuthenticated);
     this.toastr.success('User logged out successfully!', '', {
       positionClass: 'toast-top-center',
       timeOut: 3000

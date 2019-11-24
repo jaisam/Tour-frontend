@@ -10,7 +10,41 @@ import { TourService } from 'src/app/services/tour.service';
 })
 export class TourDetailsComponent implements OnInit {
 
-  tour;
+  tour = {
+    name: "",
+  slug: "",
+  duration: 0,
+  maxGroupSize: 0,
+  difficulty: "",
+  ratingsAverage: 0,
+  ratingsQuantity: {
+      type: Number,
+      default: 0
+  },
+  price: 0,
+  priceDiscount: 0,
+  summary: "",
+  description: "",
+  imageCover: "",
+  images: [],
+  createdAt: "",
+  startDates: [Date],
+  isDeleted: "",
+  startLocation: {
+      coordinates: "",
+      adddress: "",
+      description: "",
+  },
+  locations: [
+      {
+          coordinates: 0,
+          address: "",
+          Description: "",
+          day: 0
+      }
+  ],
+  guides: []
+  };
   stars = [1,2,3,4,5];
   constructor(private route: ActivatedRoute, private router: Router, private tourService: TourService) { }
 
