@@ -36,13 +36,12 @@ export class MyAccountComponent implements OnInit, OnDestroy {
 
     this.userCredentialsSubscription = this.authService.getUserCredentials()
       .subscribe(res => {
-        console.log(res);
         if (res) {
           this.user.email = res.email;
           this.user.name = res.name;
           this.user.photo = res.photo;
         }
-        else{
+        else {
           this.user = {
             name: "",
             email: "",
@@ -61,21 +60,18 @@ export class MyAccountComponent implements OnInit, OnDestroy {
   }
 
   updateUserData(userData) {
-    console.log('photo :' , this.file);
+    console.log('photo :', this.file);
     let user = new FormData();
-    user.append('name', userData.value.name ? userData.value.name : this.user.name );
-    user.append('email', userData.value.email ? userData.value.email : this.user.email );
-    user.append('photo', this.file );
+    user.append('name', userData.value.name ? userData.value.name : this.user.name);
+    user.append('email', userData.value.email ? userData.value.email : this.user.email);
+    user.append('photo', this.file);
     // console.log(user.get('name'));
     console.log(user);
     this.authService.updateUserData(user)
       .subscribe(res => {
         if (res.status === "success") {
-          // userData.reset(); // Resetting the input fields
           this.authService.setUser(res.data.user);
           // No need to assign new token as only name or email or photo of user is updated.
-          // const token = res.token;
-          // this.authService.setToken(token);
           this.toastr.success('User data updated successfully', '', {
             positionClass: 'toast-top-center',
             timeOut: 3000
@@ -103,7 +99,6 @@ export class MyAccountComponent implements OnInit, OnDestroy {
     }
     this.authService.updatePassword(user)
       .subscribe(res => {
-        console.log(res);
         if (res.status === "success") {
           passwordData.reset(); // Resetting the input fields
           // Need to delete old token as password is updated and let user login again to get new token

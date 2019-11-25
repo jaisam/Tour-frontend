@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { TourService } from '../../services/tour.service';
-
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-tour-list',
@@ -11,7 +11,8 @@ export class TourListComponent implements OnInit {
 
   tours = [];
 
-  constructor(private tourService: TourService) { }
+  constructor(private tourService: TourService,
+    private toastr: ToastrService) { }
 
   ngOnInit() {
     this.getAllTours();
@@ -26,8 +27,12 @@ export class TourListComponent implements OnInit {
           console.log(res.message);
         }
       },
-        error => {
-          console.log(error);
+        err => {
+          // console.log(err.error.message);
+          this.toastr.error(err.error.message, '', {
+            positionClass: 'toast-top-center',
+            timeOut: 3000
+          });
         });
   }
 }

@@ -13,11 +13,10 @@ export class TourCardComponent implements OnInit {
   constructor(private route: Router) { }
 
   ngOnInit() {
-    // console.log('Inside ngOnInit ', this.tour);
   }
 
   tourDetailsRoute(tour) {
-    this.route.navigate(['/tour-details', tour.slug ]); // tour.slug is parameter for /tour-details url
+    this.route.navigate(['/tour-details', tour.slug]); // tour.slug is parameter for /tour-details url
   }
 
 }

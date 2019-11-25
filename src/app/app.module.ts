@@ -18,7 +18,6 @@ import { LoginComponent } from './auth/login/login.component';
 import { SignupComponent } from './auth/signup/signup.component';
 import { AlertComponent } from './components/alert/alert.component';
 import { MyAccountComponent } from './components/my-account/my-account.component';
-import { GlobalsService } from './services/globals.service';
 
 
 @NgModule({
@@ -42,7 +41,6 @@ import { GlobalsService } from './services/globals.service';
     ToastrModule.forRoot()
   ],
   providers: [
-    GlobalsService ,
     CookieService,
     {
       provide: HTTP_INTERCEPTORS,

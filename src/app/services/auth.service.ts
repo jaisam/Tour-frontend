@@ -13,15 +13,15 @@ import { ToastrService } from 'ngx-toastr';
 export class AuthService {
 
   server_base_url = `${environment.server_base_url}/user`;
-  user={
-    name:"",
-    email:"",
-    photo:"",
-    role:"",
-    _id:""
+  user = {
+    name: "",
+    email: "",
+    photo: "",
+    role: "",
+    _id: ""
   };
   private userCredentials = new BehaviorSubject(this.user);
-  
+
 
 
   constructor(private http: HttpClient,
@@ -40,7 +40,7 @@ export class AuthService {
   }
 
   setToken(token) {
-    this.cookieService.set('jwt', token, 1 , '/'); // Expiry day is set to 1h. 
+    this.cookieService.set('jwt', token, 1, '/'); // Expiry set to 1 day . For 1h = 1/24. 
   }
 
   deleteToken() {
@@ -63,15 +63,10 @@ export class AuthService {
             positionClass: 'toast-top-center',
             timeOut: 3000
           });
-          // this.appComponent.createAlertComponent("success", "User created successfully!");
-          // this.appComponent.switchButtons();
-          // this.userCredentials.emit(user);
           this.router.navigate(['/tour-list']);
         }
       },
         err => {
-          console.log(err.error.message);
-          // this.appComponent.createAlertComponent("error", err.error.message);
           this.toastr.error(err.error.message, '', {
             positionClass: 'toast-top-center',
             timeOut: 3000
@@ -90,13 +85,11 @@ export class AuthService {
             positionClass: 'toast-top-center',
             timeOut: 3000
           });
-          // this.appComponent.createAlertComponent('success', 'User logged in successfully!');
-          // this.appComponent.switchButtons();
           this.router.navigate(['/tour-list']);
         }
       },
         err => {
-          console.log(err.error.message);
+          // console.log(err.error.message);
           this.toastr.error(err.error.message, '', {
             positionClass: 'toast-top-center',
             timeOut: 3000
@@ -107,18 +100,14 @@ export class AuthService {
   logout() {
     this.deleteToken();
     this.user = {
-      name:"",
-      email:"",
-      photo:"",
-      role:"",
-      _id:""
+      name: "",
+      email: "",
+      photo: "",
+      role: "",
+      _id: ""
     };
     this.userCredentials.next(this.user);
     this.router.navigate(['/']);
-    // this.toastr.success('User logged out successfully!', '', {
-    //   positionClass: 'toast-top-center',
-    //   timeOut: 3000
-    // });
   }
 
   getUser() {
@@ -126,10 +115,13 @@ export class AuthService {
     this.http.get<any>(server_url)
       .subscribe(res => {
         this.setUser(res.data.data);
-        // this.userCredentials.next(this.user);
       },
         err => {
-          console.log(err.error.message);
+          // console.log(err.error.message);
+          this.toastr.error(err.error.message, '', {
+            positionClass: 'toast-top-center',
+            timeOut: 3000
+          });
         });
   }
 
@@ -142,4 +134,6 @@ export class AuthService {
     let server_url = this.server_base_url + '/updateMyPassword';
     return this.http.patch<any>(server_url, user);
   }
+
+
 }

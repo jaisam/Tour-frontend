@@ -18,9 +18,7 @@ export class TourService {
   }
 
   getTour(param): Observable<any> {
-    console.log( param);
     let server_url = `${this.server_base_url}/${param}`;
-    console.log(server_url);
     return this.http.get<any>(server_url);
   }
 }
