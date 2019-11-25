@@ -1,0 +1,43 @@
+Commit #1:
+1) Created components tour-list,tour-card,tour-details,login,signup. Added their respective html,css codes.
+2) Created MonthYearFormat pipe to display only 'Month Year' of date in tour-card.html,tour-details.html
+3) Created tour,review,auth services and added function for GET API.
+4) Added routing :
+    / or /tour-list - app.component.html + tour-list.html
+    /tour-details/:slug - tour-details.html
+    /login - login.html
+5) Data communication in tour-list,tour-details,login working properly.
+Used ngx-cookie-service pkg to store data in cookie.
+
+Issues : After logging in user successfully, login,signup buttons are not getting hidden.
+
+
+Commit #2:
+1) Created alert component. This component will be called dynamically for following :
+    a) User logged in successfully.
+    b) Display error mesage when error occured while login.
+    c) User logged out successfully.
+    d) Password changed successfully.
+    e) User data updated successfully. 
+2) Created myAccount component and added respective HTML,CSS codes.
+3) Created HttpInterceptor to add token in request header which is stored in cookie.
+4) Update User data(name,email) and Update Password functionality is working. 
+Updating photo functionality is not yet added.
+
+
+Commit #3:
+1) Updating photo functionality working now properly.
+2) Created signUp functionality. Added respective HTML,CSS codes and functions.
+3) Created Logout functionality. 
+4) Created EventEmitter in login/signup component.It is not working.
+
+Commit #4 : 
+1) Made changes so that images are displayed as fetched by DB or default it from assets folder.
+2) Made changes so that LOGOUT,LOGIN buttons are working properly.
+ 
+Commit #5:
+1) Login,Logout functionality was not working when user updated his name,email,photo under account settings
+in /me page. Made changes for same.
+
+Commit #6:
+1) Created server.js file for deployment purpose and did changes in package.json
