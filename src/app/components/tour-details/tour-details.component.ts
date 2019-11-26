@@ -42,7 +42,8 @@ export class TourDetailsComponent implements OnInit {
         day: 0
       }
     ],
-    guides: []
+    guides: [],
+    reviews : []
   };
   stars = [1, 2, 3, 4, 5];
   constructor(private route: ActivatedRoute, private router: Router, private tourService: TourService) { }

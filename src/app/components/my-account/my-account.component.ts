@@ -21,7 +21,8 @@ export class MyAccountComponent implements OnInit, OnDestroy {
   public user = {
     name: "",
     email: "",
-    photo: ""
+    photo: "",
+    role : ""
   };
   file;
   private userCredentialsSubscription: Subscription;
@@ -45,7 +46,8 @@ export class MyAccountComponent implements OnInit, OnDestroy {
           this.user = {
             name: "",
             email: "",
-            photo: ""
+            photo: "",
+            role : ""
           };
         }
       });
